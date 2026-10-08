@@ -1,0 +1,17 @@
+.env
+.env.*
+*.env
+!.env.example
+token
+*.sqlite*
+*.db
+*.log
+__pycache__/
+*.pyc
+.venv/
+vault/
+private/
+backups/
+consolidaciones/
+*.zip
+

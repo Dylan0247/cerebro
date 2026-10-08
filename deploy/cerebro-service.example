@@ -1,0 +1,18 @@
+# Template only: replace the paths and command for the chosen component.
+[Unit]
+Description=Cerebro component
+After=network.target
+
+[Service]
+Type=simple
+EnvironmentFile=%h/.config/cerebro/runtime.env
+WorkingDirectory=%h/cerebro/src
+ExecStart=/usr/bin/python3 %h/cerebro/src/service.py
+Restart=on-failure
+RestartSec=10
+TimeoutStopSec=90
+UMask=0077
+NoNewPrivileges=true
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,92 @@
+{
+  "name": "Cerebro — propuesta-relevo",
+  "nodes": [
+    {
+      "id": "public-node-1",
+      "name": "Recibir propuesta",
+      "type": "n8n-nodes-base.webhook",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "cerebro-relevo",
+        "authentication": "headerAuth",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "position": [
+        0,
+        0
+      ],
+      "typeVersion": 2.1
+    },
+    {
+      "id": "public-node-2",
+      "name": "Validar sin guardar",
+      "type": "n8n-nodes-base.httpRequest",
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:18768/prepare",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.body) }}",
+        "options": {
+          "timeout": 60000,
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "position": [
+        300,
+        0
+      ],
+      "typeVersion": 4.3
+    },
+    {
+      "id": "public-node-3",
+      "name": "Devolver vista previa",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "position": [
+        600,
+        0
+      ],
+      "typeVersion": 1.5
+    }
+  ],
+  "connections": {
+    "Recibir propuesta": {
+      "main": [
+        [
+          {
+            "node": "Validar sin guardar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validar sin guardar": {
+      "main": [
+        [
+          {
+            "node": "Devolver vista previa",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false
+}
